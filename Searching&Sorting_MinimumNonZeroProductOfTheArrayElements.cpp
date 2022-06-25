@@ -1,22 +1,26 @@
 class Solution {
-    int mod=1000000007;
-    long power(int a,long b)
-    {
-        if(b==0)
-            return 1;
-        long prev=power(a,b>>1)%mod;
-        long ans=(prev*prev)%mod;
-        if(b&1)
-            return (ans*a)%mod;
-        return ans;
-    }
 public:
-    int minNonZeroProduct(int p) {
-        long max=power(2,p)-1;
-        long toPower=1L<<(p-1);
+    long long myPow(long long base, long long exponent, long long mod) {
+        if (exponent == 0) return 1;
+        if (exponent == 1) return base % mod;
         
-        long ans=power(max-1,toPower-1);
-        ans=((ans%mod)*(max%mod))%mod;
-        return ans;
+        long long tmp = myPow(base, exponent/2, mod);
+        
+        if (exponent % 2 == 0) {
+            return (tmp * tmp) % mod;
+        }
+        else {
+            tmp = tmp * tmp % mod;
+            base %= mod;
+            return (tmp * base) % mod;
+        }
+    }
+    
+    int minNonZeroProduct(int p) {
+        long long range = pow(2, p);
+        range--;
+        long long mod = pow(10, 9) + 7;
+        long long tmp = myPow(range-1, range/2, mod);
+        return (tmp * (range%mod)) % mod;
     }
 };
